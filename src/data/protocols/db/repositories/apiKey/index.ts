@@ -1,2 +1,2 @@
 export * from './update';
-export * from './loadByKey';
+export * from './loadByUniqueIdentifier';
