@@ -1,8 +1,8 @@
 import { UserModel } from "../models";
-import { UpdateApiKeyRepository } from "../../../../data";
+import { UpdateUserRepository } from "../../../../data";
 
-export class MongoUpdateApiKeyRepository implements UpdateApiKeyRepository {
-  async update (identifier: string,  apiKeyData: UpdateApiKeyRepository.Request): Promise<void> {
+export class MongoUpdateApiKeyRepository implements UpdateUserRepository {
+  async update (identifier: string,  apiKeyData: UpdateUserRepository.Request): Promise<void> {
     try {
       const filter = { identifier };
       const update = { $set: apiKeyData };

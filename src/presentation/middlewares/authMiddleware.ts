@@ -11,10 +11,10 @@ export class AuthMiddleware implements Middleware {
 
   async handle(httpRequest: any): Promise<HttpResponse> {
     try{
-      const { apiKey, uniqueIdentifier } = httpRequest;
+      const { uniqueIdentifier, password } = httpRequest;
 
-      if(apiKey && uniqueIdentifier){
-        const isValidApiKey = await this.authentication.load({uniqueIdentifier, apiKey});
+      if(password && uniqueIdentifier){
+        const isValidApiKey = await this.authentication.authenticate({uniqueIdentifier, password});
         if(isValidApiKey){
           return ok({'accesGranted': isValidApiKey });
         }
