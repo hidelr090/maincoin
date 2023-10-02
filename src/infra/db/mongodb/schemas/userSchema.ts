@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const apiKeySchema = new mongoose.Schema(
+export const userSchema = new mongoose.Schema(
   {
     name: String,
     apiKey: String,
