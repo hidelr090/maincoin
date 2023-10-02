@@ -1,13 +1,13 @@
-export interface UpdateApiKey {
-  update: (uniqueIdentifier: string, apiKeyData: UpdateApiKey.Request) => Promise<UpdateApiKey.Result>;
+export interface UpdateUser {
+  update: (uniqueIdentifier: string, apiKeyData: UpdateUser.Request) => Promise<UpdateUser.Result>;
 }
 
-export namespace UpdateApiKey {
+export namespace UpdateUser {
   export type Result = boolean;
 
   export type Request = {
     name: string;
-    apiKey: string;
+    passwordHash: string;
     description: string;
     uniqueIdentifier: string;
     createdAt?: Date;

@@ -1,4 +1,4 @@
 export * from './updateCurrencies';
 export * from './loadCurrencyExchange';
-export * from './updateApiKey';
+export * from './updateUser';
 export * from './authentication';

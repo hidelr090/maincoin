@@ -1,27 +1,46 @@
 import { Authentication } from "../../domain";
-import { HashComparer } from "../protocols";
-import { LoadApiKeyByUniqueIdentifierRepository } from "../protocols/db";
+import { HashComparer, Encrypter} from "../protocols";
+import { LoadApiKeyByUniqueIdentifierRepository, UpdateAccessTokenRepository} from "../protocols/db";
 
 export class DbAuthentication implements Authentication {
   constructor(
     private readonly loadApiKeyByUniqueIdentifierRepository: LoadApiKeyByUniqueIdentifierRepository,
-    private readonly hashComparer: HashComparer
+    private readonly hashComparer: HashComparer,
+    private readonly encryption: Encrypter,
+    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
   ){
   };
 
-  async load (params: Authentication.Params): Promise<Authentication.Result>{
-    
-    let result = false;
+  async authenticate (params: Authentication.Params): Promise<Authentication.Result>{
+    let result = null;
+    const userExists = await this.loadApiKeyByUniqueIdentifierRepository.loadByUniqueIdentifier(params.uniqueIdentifier);
 
-    const apiKeyExists = await this.loadApiKeyByUniqueIdentifierRepository.loadByUniqueIdentifier(params.uniqueIdentifier);
+    if(userExists) {
+      const { tokenExpiration, id } = userExists;
 
-    if(apiKeyExists) {
-      const isValid  = await this.hashComparer.compare(params.apiKey, apiKeyExists.apiKey);
+      const isValid  = await this.hashComparer.compare(params.password, userExists.passwordHash);
+
       if(isValid){
-        result = true;
+        const accessToken = await this.encryption.encrypt(userExists.id);
+
+        const updateAccessTokenParams: UpdateAccessTokenRepository.Params = { id, token: accessToken };
+        
+        if(tokenExpiration) 
+          updateAccessTokenParams.tokenExpiration = tokenExpiration;
+        else{
+          const expirationDate = new Date();
+          expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+          updateAccessTokenParams.tokenExpiration = expirationDate;
+        }
+
+        await this.updateAccessTokenRepository.updateAccessToken(updateAccessTokenParams);
+        result = {
+          token: accessToken, 
+          tokenExpiration, 
+          id
+        }
       }
     }
-
     return result;
   }
 }

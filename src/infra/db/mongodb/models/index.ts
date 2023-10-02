@@ -1,2 +1,2 @@
 export * from './CurrencyModel';
-export * from './ApiKeyModel';
+export * from './UserModel';

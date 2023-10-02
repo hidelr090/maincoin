@@ -1,12 +1,15 @@
 export interface Authentication {
-  load: (params: Authentication.Params) => Promise<Authentication.Result>
+  authenticate: (params: Authentication.Params) => Promise<Authentication.Result>
 }
 
 export namespace Authentication {
   export type Params = {
     uniqueIdentifier: string,
-    apiKey: string
+    password: string
   }
-
-  export type Result = boolean;
+  export type Result = {
+    token: string,
+    tokenExpiration: Date,
+    id: string,
+  } | null;
 }

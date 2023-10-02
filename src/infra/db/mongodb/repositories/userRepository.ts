@@ -1,4 +1,4 @@
-import { ApiKeyModel } from "../models";
+import { UserModel } from "../models";
 import { UpdateApiKeyRepository } from "../../../../data";
 
 export class MongoUpdateApiKeyRepository implements UpdateApiKeyRepository {
@@ -7,7 +7,7 @@ export class MongoUpdateApiKeyRepository implements UpdateApiKeyRepository {
       const filter = { identifier };
       const update = { $set: apiKeyData };
       const options = { upsert: true };
-      await ApiKeyModel.updateOne(filter, update, options);
+      await UserModel.updateOne(filter, update, options);
     }catch(err) {
       throw err;
     }

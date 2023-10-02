@@ -1,9 +1,13 @@
+import { Authentication } from "../../../../../domain";
 export interface LoadApiKeyByUniqueIdentifierRepository {
   loadByUniqueIdentifier: (identifier: string) => Promise<LoadApiKeyByUniqueIdentifierRepository.Result>;
 }
 
 export namespace LoadApiKeyByUniqueIdentifierRepository {
   export type Result = {
-    apiKey: string;
-  } | null;
+    token: string,
+    tokenExpiration: Date,
+    id: string,
+    passwordHash: string
+  };
 }
