@@ -1,9 +1,9 @@
 import { Authentication } from "../../../../../domain";
-export interface LoadApiKeyByUniqueIdentifierRepository {
-  loadByUniqueIdentifier: (identifier: string) => Promise<LoadApiKeyByUniqueIdentifierRepository.Result>;
+export interface LoadUserByUniqueIdentifierRepository {
+  loadByUniqueIdentifier: (identifier: string) => Promise<LoadUserByUniqueIdentifierRepository.Result>;
 }
 
-export namespace LoadApiKeyByUniqueIdentifierRepository {
+export namespace LoadUserByUniqueIdentifierRepository {
   export type Result = {
     token: string,
     tokenExpiration: Date,

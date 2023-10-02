@@ -1,10 +1,10 @@
 import { Authentication } from "../../domain";
 import { HashComparer, Encrypter} from "../protocols";
-import { LoadApiKeyByUniqueIdentifierRepository, UpdateAccessTokenRepository} from "../protocols/db";
+import { LoadUserByUniqueIdentifierRepository, UpdateAccessTokenRepository} from "../protocols/db";
 
 export class DbAuthentication implements Authentication {
   constructor(
-    private readonly loadApiKeyByUniqueIdentifierRepository: LoadApiKeyByUniqueIdentifierRepository,
+    private readonly loadUserByUniqueIdentifierRepository: LoadUserByUniqueIdentifierRepository,
     private readonly hashComparer: HashComparer,
     private readonly encryption: Encrypter,
     private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
@@ -13,7 +13,7 @@ export class DbAuthentication implements Authentication {
 
   async authenticate (params: Authentication.Params): Promise<Authentication.Result>{
     let result = null;
-    const userExists = await this.loadApiKeyByUniqueIdentifierRepository.loadByUniqueIdentifier(params.uniqueIdentifier);
+    const userExists = await this.loadUserByUniqueIdentifierRepository.loadByUniqueIdentifier(params.uniqueIdentifier);
 
     if(userExists) {
       const { tokenExpiration, id } = userExists;
